@@ -22,8 +22,8 @@ public class PlayerInteraction : MonoBehaviour
     public static int SpecialItem = 0;
 
     public GameObject Banana;
-    public TextMeshProUGUI PlayerText;
-    public TextMeshProUGUI EnemieText;
+    public TextMeshProUGUI playerText;
+    public TextMeshProUGUI enemieText;
 
 
     // Start is called before the first frame update
