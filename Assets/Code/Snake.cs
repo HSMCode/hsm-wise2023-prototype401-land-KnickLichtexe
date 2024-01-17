@@ -8,7 +8,6 @@ public class Snake : MonoBehaviour
     public float HP = 1f;
     public static int ATP = 1;
     public static int SpecialAttack = 0;
-    public float AttackCooldown = 0f;
     public static bool EnemieDefeat = false;
     public static bool FightWon = false;
     
@@ -26,11 +25,10 @@ public class Snake : MonoBehaviour
     void Update()
     {
         //HP Reduction for an Attack
-        AttackCooldown -= Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Space) && AttackCooldown <= 0f) 
+        if (Input.GetKeyDown(KeyCode.Space) && PlayerInteraction.EAttackCooldown <= 0f) 
         {
             HP -= PlayerInteraction.PlayerATP;
-            AttackCooldown = 2f;
+            PlayerInteraction.EAttackCooldown = 2;
         }
 
         if (HP <= 0) 

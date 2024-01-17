@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -14,10 +17,13 @@ public class PlayerInteraction : MonoBehaviour
     public static int Level = 2;
     public int MaxXP = 10;
     public static bool Death = false;
-    public float AttackCooldown = 0f;
+    public static float AttackCooldown = 0f;
+    public static float EAttackCooldown = 0f;
     public static int SpecialItem = 0;
 
     public GameObject Banana;
+    public TextMeshProUGUI PlayerText;
+    public TextMeshProUGUI EnemieText;
 
 
     // Start is called before the first frame update
@@ -29,7 +35,13 @@ public class PlayerInteraction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene("Gorilla Warfare", LoadSceneMode.Single);
+        }
+
         AttackCooldown -= Time.deltaTime;
+        EAttackCooldown -= Time.deltaTime;
         if (Snake.FightWon == true) 
         {
             GainXP();
@@ -73,7 +85,10 @@ public class PlayerInteraction : MonoBehaviour
     }
     void Ded()
     {
-        GameObject.Destroy(this.gameObject);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SceneManager.LoadScene("Gorilla Warfare", LoadSceneMode.Single);
+        }
     }
 
     void SpecialItemDrop()
