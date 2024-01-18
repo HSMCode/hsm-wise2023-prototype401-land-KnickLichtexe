@@ -29,7 +29,11 @@ public class PlayerInteraction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerText = GetComponent<TextMeshProUGUI>();
+        enemieText = GetComponent<TextMeshProUGUI>();
+
+        playerText = GameObject.Find("Player Info").GetComponent<TextMeshProUGUI>();
+        enemieText = GameObject.Find("Enemie Info").GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
