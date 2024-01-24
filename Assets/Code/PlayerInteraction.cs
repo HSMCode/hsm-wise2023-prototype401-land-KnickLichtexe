@@ -26,7 +26,7 @@ public class PlayerInteraction : MonoBehaviour
     public GameObject Banana;
     public TextMeshProUGUI playerText, enemieText, levelText;
     private Animator b_animator;
-
+    public AudioSource Hit, EHit, Music;
 
 
     // Start is called before the first frame update
@@ -84,6 +84,7 @@ public class PlayerInteraction : MonoBehaviour
             playerText.text = "Player HP: " + PlayerHP + "/" + MaxHP.ToString();
             EAttack = true;
             Invoke("ATA", .5f);
+            EHit.Play();
 
         }
         if (SelfAttack == true)
@@ -91,6 +92,7 @@ public class PlayerInteraction : MonoBehaviour
             b_animator.SetBool("Attack", true);
             Invoke("AttackAnim", .5f);
             SelfAttack = false;
+            Hit.Play();
         }
 
 
