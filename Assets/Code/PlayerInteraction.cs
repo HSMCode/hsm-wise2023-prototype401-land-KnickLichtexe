@@ -11,8 +11,8 @@ using TMPro;
 public class PlayerInteraction : MonoBehaviour
 {
     public static int PlayerHP = 20;
-    public int MaxHP = 20;
-    public static int PlayerATP = 1;
+    public static int MaxHP = 20;
+    public static int PlayerATP = 2;
     public int XP = 0;
     public static int Level = 1;
     public int MaxXP = 10;
@@ -21,9 +21,11 @@ public class PlayerInteraction : MonoBehaviour
     public static float EAttackCooldown = 0f;
     public static int SpecialItem = 0;
     public static bool EAttack = false;
+    public static bool BANANA = false, Heal = false, SelfAttack = false;
 
     public GameObject Banana;
     public TextMeshProUGUI playerText, enemieText, levelText;
+    private Animator b_animator;
 
 
 
@@ -33,7 +35,14 @@ public class PlayerInteraction : MonoBehaviour
         Level = 1;
         MaxHP = 20;
         PlayerHP = 20;
-        PlayerATP = 1;
+        PlayerATP = 2;
+        EAttack = false;
+        Death = false;
+        SpecialItem = 0;
+        EAttackCooldown = 0f;
+        AttackCooldown = 0f;
+        MaxXP = 10;
+        Level = 1;
 
         playerText = GetComponent<TextMeshProUGUI>();
         enemieText = GetComponent<TextMeshProUGUI>();
@@ -43,8 +52,9 @@ public class PlayerInteraction : MonoBehaviour
         enemieText = GameObject.Find("Enemie Info").GetComponent<TextMeshProUGUI>();
         levelText = GameObject.Find("Level Info").GetComponent<TextMeshProUGUI>();
 
-        playerText.text = "Player HP: " + PlayerHP.ToString();
+        playerText.text = "Player HP: " + PlayerHP + "/" + MaxHP.ToString();
         levelText.text = "Level: " + Level.ToString();
+        b_animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -52,33 +62,51 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
+            Snake.StopAttack = false;
             SceneManager.LoadScene("Gorilla Warfare", LoadSceneMode.Single);
         }
-
+        if (SpawnerSpawner.SpawnSomething == true)
+        {
+            PlayerHP = MaxHP;
+        }
         AttackCooldown -= Time.deltaTime;
         EAttackCooldown -= Time.deltaTime;
-        if (Snake.FightWon == true) 
+        if (Snake.FightWon == true)
         {
             GainXP();
-            PlayerHP = MaxHP;
             Snake.FightWon = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && PlayerInteraction.EAttackCooldown <= 0f)
+        if (EAttackCooldown <= 0f && Snake.StopAttack == true)
         {
             PlayerHP -= Snake.ATP;
             EAttackCooldown = 2f;
-            playerText.text = "Player " + PlayerHP.ToString();
+            playerText.text = "Player HP: " + PlayerHP + "/" + MaxHP.ToString();
+            EAttack = true;
+            Invoke("ATA", .5f);
+
         }
+        if (SelfAttack == true)
+        {
+            b_animator.SetBool("Attack", true);
+            Invoke("AttackAnim", .5f);
+            SelfAttack = false;
+        }
+
 
         if (PlayerHP <= 0)
         {
             Death = true;
             Ded();
         }
-        if (Input.GetKeyDown(KeyCode.Space) && AttackCooldown > 0f)
+        if (BANANA == true)
         {
-            BananaEaten();
+            playerText.text = "Player HP: " + PlayerHP + "/" + MaxHP.ToString();
+        }
+        if (Heal == true)
+        {
+            playerText.text = "Player HP: " + PlayerHP + "/" + MaxHP.ToString();
+            Heal = false;
         }
     }
 
@@ -90,34 +118,45 @@ public class PlayerInteraction : MonoBehaviour
         {
             Level += 1;
             XP -= MaxXP;
+            PlayerHP = MaxHP;
             LevelUP();
         }
     }
     void LevelUP()
     {
         MaxHP = MaxHP + Level;
-        PlayerATP = PlayerATP * (Level/2);
+        PlayerATP = PlayerATP * (Level / 2);
         MaxXP = Level * 5;
+        levelText.text = "Level: " + Level.ToString();
     }
     void Ded()
     {
+        Snake.StopAttack = false;
+        b_animator.SetBool("Death", true);
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            Snake.StopAttack = false;
+            b_animator.SetBool("Death", false);
             SceneManager.LoadScene("Gorilla Warfare", LoadSceneMode.Single);
         }
     }
 
     void SpecialItemDrop()
     {
-        if (Snake.SpecialAttack >= 5)
+        if (Snake.SpecialAttack >= 4)
         {
             Instantiate(Banana, new Vector3(-7, 2, 0), transform.rotation * Quaternion.Euler(0, 90f, 0));
             SpecialItem = 1;
         }
     }
-    void BananaEaten()
+
+    void ATA()
     {
-        PlayerHP = MaxHP;
-        SpecialItem = 0;
+        b_animator.SetBool("Attack", false);
+    }
+
+    void AttackAnim ()
+    {
+        b_animator.SetBool("Attack", false);
     }
 }

@@ -25,9 +25,10 @@ public class SpawnerSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-
-
+        SpawnSomething = true;
+        enemiespawner = 0;
+        EnemieType = 0;
+        enemiespawner = 0;
         Instantiate(Monkey, new Vector3(-7, 0, 0), transform.rotation * Quaternion.Euler(0, 90f, 0));
 
 
