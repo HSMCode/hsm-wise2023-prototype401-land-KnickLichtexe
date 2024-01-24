@@ -14,26 +14,37 @@ public class PlayerInteraction : MonoBehaviour
     public int MaxHP = 20;
     public static int PlayerATP = 1;
     public int XP = 0;
-    public static int Level = 2;
+    public static int Level = 1;
     public int MaxXP = 10;
     public static bool Death = false;
     public static float AttackCooldown = 0f;
     public static float EAttackCooldown = 0f;
     public static int SpecialItem = 0;
+    public static bool EAttack = false;
 
     public GameObject Banana;
-    public TextMeshProUGUI playerText;
-    public TextMeshProUGUI enemieText;
+    public TextMeshProUGUI playerText, enemieText, levelText;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
+        Level = 1;
+        MaxHP = 20;
+        PlayerHP = 20;
+        PlayerATP = 1;
+
         playerText = GetComponent<TextMeshProUGUI>();
         enemieText = GetComponent<TextMeshProUGUI>();
+        levelText = GetComponent<TextMeshProUGUI>();
 
         playerText = GameObject.Find("Player Info").GetComponent<TextMeshProUGUI>();
         enemieText = GameObject.Find("Enemie Info").GetComponent<TextMeshProUGUI>();
+        levelText = GameObject.Find("Level Info").GetComponent<TextMeshProUGUI>();
+
+        playerText.text = "Player HP: " + PlayerHP.ToString();
+        levelText.text = "Level: " + Level.ToString();
     }
 
     // Update is called once per frame
@@ -53,12 +64,13 @@ public class PlayerInteraction : MonoBehaviour
             Snake.FightWon = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && AttackCooldown <= 0f)
+        if (Input.GetKeyDown(KeyCode.Space) && PlayerInteraction.EAttackCooldown <= 0f)
         {
-
             PlayerHP -= Snake.ATP;
-            AttackCooldown = 2f;
+            EAttackCooldown = 2f;
+            playerText.text = "Player " + PlayerHP.ToString();
         }
+
         if (PlayerHP <= 0)
         {
             Death = true;
@@ -83,7 +95,7 @@ public class PlayerInteraction : MonoBehaviour
     }
     void LevelUP()
     {
-        MaxHP = MaxHP + (Level/2);
+        MaxHP = MaxHP + Level;
         PlayerATP = PlayerATP * (Level/2);
         MaxXP = Level * 5;
     }
