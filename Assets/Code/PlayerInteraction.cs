@@ -26,7 +26,7 @@ public class PlayerInteraction : MonoBehaviour
     public GameObject Banana;
     public TextMeshProUGUI playerText, enemieText, levelText;
     private Animator b_animator;
-    public AudioSource Hit, EHit, Music;
+    public AudioSource Hit, EHit, Music, DeD;
 
 
     // Start is called before the first frame update
@@ -55,6 +55,7 @@ public class PlayerInteraction : MonoBehaviour
         playerText.text = "Player HP: " + PlayerHP + "/" + MaxHP.ToString();
         levelText.text = "Level: " + Level.ToString();
         b_animator = GetComponent<Animator>();
+        
     }
 
     // Update is called once per frame
@@ -100,6 +101,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             Death = true;
             Ded();
+            DeD.Play();
         }
         if (BANANA == true)
         {
