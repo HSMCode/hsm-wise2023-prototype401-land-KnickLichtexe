@@ -101,3 +101,7 @@ details
   - Hat tip to anyone whose code was used
   - Inspiration
   - etc
+
+## Credits
+
+  - Philipp Siemoneit
